@@ -1,0 +1,11 @@
+<?php
+
+use App\Http\Controllers\UserController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Laravel\Passport\Http\Middleware\EnsureClientIsResourceOwner;
+Route::middleware(EnsureClientIsResourceOwner::class)->group(function() {
+
+    Route::get('/users',[UserController::class,'index']);
+    Route::post('/users',[UserController::class,'store']);
+});
