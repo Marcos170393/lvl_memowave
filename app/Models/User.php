@@ -3,14 +3,23 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Model
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+
+    /**
+     * Class attributes
+     */
+    private $password;
+    private $username;
+    private $updated_at;
+    private $created_at;
 
     /**
      * The attributes that are mass assignable.
@@ -19,29 +28,29 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'username',
-        'password',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+
+    public function __set($key, $value)
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        if (!property_exists($this, $key) && !array_key_exists($key, $this->attributes)) {
+            throw new Exception("La propiedad '{$key}' no existe en el modelo User.");
+        }
+
+        parent::__set($key, $value);
+    }
+
+    /**
+
+     * The roles that belong to the user.
+
+     */
+
+    public function notes(): BelongsToMany
+
+    {
+
+        return $this->belongsToMany(Note::class, 'user_notes');
     }
 }
