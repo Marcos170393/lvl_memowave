@@ -18,4 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->renderable(function (AuthenticationException $e, $request) {
             return response()->json(['message' => 'Unauthenticated'], 401);
         });
+        $exceptions->renderable(function (Exception $e, $request) {
+            return response()->json(['message' => $e->getMessage()],500);
+        });
     })->create();
