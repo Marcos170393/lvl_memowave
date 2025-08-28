@@ -37,11 +37,13 @@ class UserController extends Controller
             $user = new User;
             $user->username = $data->username;
             $user->password = Hash::make($data->password);
-            $user->save();
-        } catch (\Exception $e) {
+            $result = User::insertGetId($user->toArray());
+            
+            return response($result, 200);
+
+        } catch (Exception $e) {
             Log::error($e->getMessage());
             throw new Exception($e->getMessage());
         }
-        return response('success', 200);
     }
 }
