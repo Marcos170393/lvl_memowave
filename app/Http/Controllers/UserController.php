@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -29,14 +30,9 @@ class UserController extends Controller
         return response('Unauthorized', 401);
     }
 
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $request->validate([
-            'username' => 'required|min:3|max:255|unique:users,username',
-            'password' =>  'required|min:3|max:255'
-        ]);
-        
-        $data = json_decode($request->getContent());
+        $data = (object) $request->validated();
         try {
             $user = new User;
             $user->username = $data->username;
