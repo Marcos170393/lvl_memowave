@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Exception;
@@ -12,22 +13,23 @@ use stdClass;
 
 class UserController extends Controller
 {
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $request->validate([
-            'username' => 'required|min:3|max:255',
-            'password' =>  'required|min:3|max:255'
-        ]);
-        
-        $data = json_decode($request->getContent());
-        $user = User::where('username', $data->username)->first();
-        if ($user && Hash::check($data->password, $user->password)) {
-            $response = new stdClass();
-            $response->username = $user->username;
-            $response->id = $user->id;
-            return response()->json($response,200);
+        $data = (object) $request->validated();
+        try {
+            $user = User::where('username', $data->username)->first();
+            if ($user && Hash::check($data->password, $user->password)) {
+                $response = new stdClass();
+                $response->username = $user->username;
+                $response->id = $user->id;
+                return response()->json($response, 200);
+            }
+            return response('Unauthorized', 401);
+        } catch (Exception $e) {
+            Log::critical($e->getMessage());
+            // TODO generate helper to handle different types of exceptions
+            return response('Error', 500);
         }
-        return response('Unauthorized', 401);
     }
 
     public function store(StoreUserRequest $request)
@@ -38,12 +40,13 @@ class UserController extends Controller
             $user->username = $data->username;
             $user->password = Hash::make($data->password);
             $result = User::insertGetId($user->toArray());
-            
-            return response($result, 200);
+
+            return response(["id" => $result, "username" => $user->username], 200);
 
         } catch (Exception $e) {
-            Log::error($e->getMessage());
-            throw new Exception($e->getMessage());
+            Log::critical($e->getMessage());
+            // TODO generate helper to handle different types of exceptions
+            return response(['message' => 'Error creating user'], 500);
         }
     }
 }
