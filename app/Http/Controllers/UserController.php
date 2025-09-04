@@ -41,12 +41,10 @@ class UserController extends Controller
             $user->password = Hash::make($data->password);
             $result = User::insertGetId($user->toArray());
 
-            return response(["id" => $result, "username" => $user->username], 200);
-
+            return ResponseHelper::success(["id" => $result, "username" => $user->username], 200);
         } catch (Exception $e) {
             Log::critical($e->getMessage());
-            // TODO generate helper to handle different types of exceptions
-            return response(['message' => 'Error creating user'], 500);
+            return ResponseHelper::error('Error creating user', 500);
         }
     }
 }
