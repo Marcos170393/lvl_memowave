@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ResponseHelper;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
@@ -22,13 +23,12 @@ class UserController extends Controller
                 $response = new stdClass();
                 $response->username = $user->username;
                 $response->id = $user->id;
-                return response()->json($response, 200);
+                return ResponseHelper::success($response, 200);
             }
-            return response('Unauthorized', 401);
+            return ResponseHelper::error('Wrong username or password', 404);
         } catch (Exception $e) {
             Log::critical($e->getMessage());
-            // TODO generate helper to handle different types of exceptions
-            return response('Error', 500);
+            return ResponseHelper::error('Unexpected error',500);
         }
     }
 
