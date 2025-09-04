@@ -7,7 +7,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Exception;
-use Illuminate\Http\Request;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use stdClass;
@@ -26,9 +26,12 @@ class UserController extends Controller
                 return ResponseHelper::success($response, 200);
             }
             return ResponseHelper::error('Wrong username or password', 404);
-        } catch (Exception $e) {
+        } catch(QueryException $e) {
             Log::critical($e->getMessage());
-            return ResponseHelper::error('Unexpected error',500);
+            return ResponseHelper::error('Error getting user. Try again.',500);
+        }catch (Exception $e) {
+            Log::critical($e->getMessage());
+            return ResponseHelper::error('Unexpected error', 500);
         }
     }
 
@@ -42,6 +45,9 @@ class UserController extends Controller
             $result = User::insertGetId($user->toArray());
 
             return ResponseHelper::success(["id" => $result, "username" => $user->username], 200);
+        } catch(QueryException $e) {
+            Log::critical($e->getMessage());
+            return ResponseHelper::error('Error creating user. Try again or chose another username',400);
         } catch (Exception $e) {
             Log::critical($e->getMessage());
             return ResponseHelper::error('Error creating user', 500);
