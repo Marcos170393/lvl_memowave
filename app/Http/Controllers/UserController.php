@@ -6,6 +6,7 @@ use App\Helpers\ResponseHelper;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
+use App\Services\UserService;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
@@ -19,17 +20,10 @@ class UserController extends Controller
     {
         $data = (object) $request->validated();
         try {
-            $user = User::where('username', $data->username)->first();
-            if ($user && Hash::check($data->password, $user->password)) {
-                $response = new stdClass();
-                $response->username = $user->username;
-                $response->id = $user->id;
-                return ResponseHelper::success($response, 200);
-            }
-            return ResponseHelper::error('Wrong username or password', 404);
-        } catch(QueryException $e) {
-            Log::critical($e->getMessage());
-            return ResponseHelper::error('Error getting user. Try again.',500);
+            $user = UserService::checkCredentials($data->username,$data->password);
+            if ($user) return ResponseHelper::success($user,200);
+
+            return ResponseHelper::error("user or password incorrect",401);
         }catch (Exception $e) {
             Log::critical($e->getMessage());
             return ResponseHelper::error('Unexpected error', 500);
