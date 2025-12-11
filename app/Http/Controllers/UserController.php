@@ -32,14 +32,10 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request): JsonResponse
     {
-        $data = (object) $request->validated();
+        $data = $request->validated();
         try {
-            $user = new User();
-            $user->username = $data->username;
-            $user->password = Hash::make($data->password);
-            $result = User::insertGetId($user->toArray());
-
-            return ResponseHelper::success(["id" => $result, "username" => $user->username], 200);
+            $result = UserService::save($data);
+            return ResponseHelper::success(["id" => $result, "username" => $data['username']], 200);
         } catch(QueryException $e) {
             Log::critical($e->getMessage());
             return ResponseHelper::error('Error creating user. Try again or chose another username',400);

@@ -29,4 +29,15 @@ class UserService
             throw $e;
         }
     }
+
+    public static function save($userData): int {
+        try{
+            $user['username'] = $userData['username'];
+            $user['password'] = Hash::make($userData['password']);
+            $result = User::insertGetId($user);
+            return $result;
+        }catch(Exception $e){
+            throw $e;
+        }
+    }
 }
