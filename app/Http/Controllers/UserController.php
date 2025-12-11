@@ -12,6 +12,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Request;
 use stdClass;
 
 class UserController extends Controller
@@ -42,6 +43,17 @@ class UserController extends Controller
         } catch (Exception $e) {
             Log::critical($e->getMessage());
             return ResponseHelper::error('Error creating user', 500);
+        }
+    }
+
+    public function getUserNotes(string $userId): JsonResponse
+    {
+        try{
+            $userNotes = UserService::findAllNotesByUserId($userId);
+            return ResponseHelper::success(['notes'=>$userNotes],200);
+        }catch(Exception $e){
+           Log::critical($e);
+           return ResponseHelper::error("Error getting user notes",500);
         }
     }
 }

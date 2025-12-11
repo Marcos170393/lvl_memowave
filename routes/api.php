@@ -7,8 +7,11 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Passport\Http\Middleware\EnsureClientIsResourceOwner;
 Route::middleware(EnsureClientIsResourceOwner::class)->group(function() {
 
-    Route::get('/users',[UserController::class,'login']);
-    Route::post('/users',[UserController::class,'store']);
+    Route::prefix('users')->group(function(){
+        Route::get('/',[UserController::class,'login']);
+        Route::get('/{userid}/notes',[UserController::class,'getUserNotes']);
+        Route::post('/',[UserController::class,'store']);
+    });
 
-    Route::get('/notes',[NoteController::class,'findAll']);
+    Route::get('/notes/',[NoteController::class,'findAll']);
 });

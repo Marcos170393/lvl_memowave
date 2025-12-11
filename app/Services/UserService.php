@@ -40,4 +40,14 @@ class UserService
             throw $e;
         }
     }
+
+    public static function findAllNotesByUserId($userId){
+        try {
+            $userNotes = User::find($userId)->notes()->get()->makeHidden('pivot');
+            return $userNotes;
+        } catch (QueryException $e) {
+            Log::critical($e);
+            throw $e;
+        }
+    }
 }
