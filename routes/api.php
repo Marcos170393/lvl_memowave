@@ -13,5 +13,8 @@ Route::middleware(EnsureClientIsResourceOwner::class)->group(function() {
         Route::post('/',[UserController::class,'store']);
     });
 
-    Route::get('/notes/',[NoteController::class,'findAll']);
+    Route::prefix('notes')->group(function(){
+        Route::post('/',[NoteController::class,'create']);
+
+    });
 });

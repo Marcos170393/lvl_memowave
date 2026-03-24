@@ -7,12 +7,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Note extends Model
 {
+
+    protected $primaryKey = 'id';
     /**
-
      * The users that belong to the role.
-
      */
-
      public function users(): BelongsToMany
 
      {

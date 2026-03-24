@@ -43,7 +43,7 @@ class User extends Model
 
     /**
 
-     * The roles that belong to the user.
+     * The notes that belong to the user.
 
      */
 
