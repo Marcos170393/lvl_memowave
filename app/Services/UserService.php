@@ -2,11 +2,9 @@
 
 namespace App\Services;
 
-use App\Helpers\ResponseHelper;
 use App\Models\User;
 use Exception;
 use Illuminate\Database\QueryException;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use stdClass;

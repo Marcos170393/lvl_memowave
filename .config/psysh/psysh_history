@@ -1,0 +1,22 @@
+App\Models\User::find(1);
+App\Models\User::find(123123);
+exit
+App\Models\User::find(123123)->notes();
+App\Models\User::find(1)->notes();
+App\Models\User::notes()->where('user.id',1);
+App\Models\User::where('user.id',1)->notes();
+App\Models\User::notes()->where('user.id',1)->first();
+App\Models\User::where('user.id',1)->notes()->first();
+App\Models\User::where('user.id',1)->notes->first();
+App\Models\User::find('user.id',1)->notes;
+App\Models\User::find(1)->notes;
+App\Models\User::find(1)->note;
+exit
+App\Models\User::find(1)->note;
+App\Models\User::find(1)->note();
+App\Models\User::find(1)->note;
+App\Models\User::find(1)->notes()->get();
+App\Models\User::find(1);
+$user = App\Models\User::find(1);
+$user->notes()->get();
+exit

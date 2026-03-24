@@ -5,7 +5,6 @@ use App\Models\Note;
 use App\Models\User;
 use Exception;
 use Http\Discovery\Exception\NotFoundException;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 
 class NotesService {

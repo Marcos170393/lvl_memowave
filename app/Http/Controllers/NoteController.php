@@ -9,7 +9,6 @@ use Http\Discovery\Exception\NotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use PhpParser\Node\Expr\Array_;
 
 class NoteController extends Controller
 {
@@ -25,7 +24,7 @@ class NoteController extends Controller
         }
 
         try{
-            
+
             $result = NotesService::create($data);
             return ResponseHelper::success(["id"=> $result],200);
 
