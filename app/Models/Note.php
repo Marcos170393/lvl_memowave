@@ -9,6 +9,7 @@ class Note extends Model
 {
 
     protected $primaryKey = 'id';
+    protected $fillable = ['title','content'];
     /**
      * The users that belong to the role.
      */

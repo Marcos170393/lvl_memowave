@@ -31,4 +31,23 @@ class NotesService {
             throw $e;
         }
     }
+
+    public static function update(array $noteData): bool {
+        try{
+            $note = Note::find($noteData['id']);
+            $data = [];
+
+            if(isset($noteData['content'])) $data['content'] = $noteData['content'];
+
+            if(isset($noteData['title'])) $data['title'] = $noteData['title'];
+
+            $data["updated_at"] = date("Y-m-d H:i:s");
+
+            $note->update($data);
+            return true;
+        }catch(Exception $e){
+            Log::critical($e->getMessage());
+            throw $e;
+        }
+    }
 }

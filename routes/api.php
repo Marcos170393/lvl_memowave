@@ -14,7 +14,7 @@ Route::middleware(EnsureClientIsResourceOwner::class)->group(function() {
     });
 
     Route::prefix('notes')->group(function(){
-        Route::post('/',[NoteController::class,'create']);
-
+        Route::post('/', [NoteController::class, 'create']);
+        Route::put('/', [NoteController::class, 'update']);
     });
 });
