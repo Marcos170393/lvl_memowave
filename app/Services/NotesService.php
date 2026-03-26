@@ -11,6 +11,8 @@ class NotesService {
     
     /**
      * Creates a new notes related to an user
+     * @param array $noteData = user_id | title
+     * @return int id
      */
     public static function create(array $noteData) : int {
         $user = User::find($noteData['user_id']);
@@ -32,6 +34,11 @@ class NotesService {
         }
     }
 
+    /**
+     * Update notes info
+     * @param array $noteData = content | title | hold
+     * @return bool
+     */
     public static function update(array $noteData): bool {
         try{
             $note = Note::find($noteData['id']);
