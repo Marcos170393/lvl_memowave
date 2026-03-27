@@ -16,6 +16,7 @@ class NoteController extends Controller
 
     public function __construct(
         protected NotesService $notesService,
+        protected ResponseHelper $responseHelper 
     ){}
 
     public function create(Request $request): JsonResponse {
@@ -26,20 +27,20 @@ class NoteController extends Controller
         ]);
         if($validator->fails()){
             Log::info($validator->errors());
-            return ResponseHelper::error($validator->errors(),400);
+            return $this->responseHelper::error($validator->errors(),400);
         }
 
         try{
 
             $result = $this->notesService::create($data);
-            return ResponseHelper::success(["id"=> $result],200);
+            return $this->responseHelper::success(["id"=> $result],200);
 
         }catch(NotFoundException $e){
             Log::critical($e->getMessage());
-            return ResponseHelper::error($e->getMessage(),400);
+            return $this->responseHelper::error($e->getMessage(),400);
         }catch(Exception $e){
             Log::critical($e->getMessage());
-            return ResponseHelper::error($e->getMessage(),$e->getCode());
+            return $this->responseHelper::error($e->getMessage(),$e->getCode());
         }
     }
 
@@ -52,14 +53,23 @@ class NoteController extends Controller
         ]);
 
         if($validator->fails()){
-            return ResponseHelper::error($validator->errors(),400);
+            return $this->responseHelper::error($validator->errors(),400);
         }
-
         try{
             $result = $this->notesService::update($data);
-            return ResponseHelper::success(["status"=> "success"],200);
+            return $this->responseHelper::success(["result"=> "success"],200);
         }catch(Exception $e){
-            return ResponseHelper::error($e->getMessage(),400);
+            return $this->responseHelper::error($e->getMessage(),400);
+        }
+    }
+
+    public function delete(int $id): JsonResponse {
+        try{
+            $this->notesService::delete($id);
+            return $this->responseHelper::success(['result'=>'success'], 200);
+        }catch(Exception $e){
+            Log::critical($e->getMessage());
+            return $this->responseHelper::error($e->getMessage(),$e->getCode());
         }
     }
 }

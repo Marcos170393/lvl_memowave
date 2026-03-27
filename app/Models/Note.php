@@ -10,6 +10,14 @@ class Note extends Model
 
     protected $primaryKey = 'id';
     protected $fillable = ['title','content'];
+
+    protected static function booted(): void
+    {
+        static::deleted(function(Note $note){
+            UserNote::where("note_id",$note->id)->delete();
+        });
+    }
+    
     /**
      * The users that belong to the role.
      */

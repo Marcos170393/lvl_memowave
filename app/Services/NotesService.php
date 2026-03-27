@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Log;
 
 class NotesService {
     
+
+    public static function find_by_id(int $id) : Note {
+        return Note::find($id);
+    }
+
     /**
      * Creates a new notes related to an user
      * @param array $noteData = user_id | title
@@ -56,5 +61,18 @@ class NotesService {
             Log::critical($e->getMessage());
             throw $e;
         }
+    }
+
+    /**
+     * Delete a note
+     * @param int id
+     * @return bool
+     */
+    public static function delete(int $id): bool {
+        $note = Note::find($id);
+        if(!$note) throw new Exception("note id not found.",404);
+        $note->delete();
+
+        return true;
     }
 }

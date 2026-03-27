@@ -6,6 +6,6 @@ class ResponseHelper {
         return response()->json($data, $status);
     }
     public static function error($message = 'An error ocurred', $status = 500){
-        return response()->json(['message' => $message], $status);
+        return response()->json(['error' => $message], $status);
     }
 }
